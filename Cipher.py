@@ -25,7 +25,7 @@ def vigenere(text: str, key: str, decrypt: bool = False) -> str:
 
 
 key = "secret"
-message = input("Enter net ID: ")
+message = input("Enter your BSSID: ")
 
 cipher = vigenere(message, key)
 print("Ciphertext:", cipher)
