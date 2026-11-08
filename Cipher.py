@@ -1,15 +1,23 @@
 def vigenere(text: str, key: str, decrypt: bool = False) -> str:
-    key = [ord(c.lower()) - ord('a') for c in key if c.isalpha() and c.isascii()]
-    if not key:
-        raise ValueError("Key must contain at least one Latin letter")
+    shifts = []
+    for c in key:
+        if c.isascii() and c.isalpha():
+            shifts.append(ord(c.lower()) - ord('a'))
+        elif c.isascii() and c.isdigit():
+            shifts.append(int(c))
+    if not shifts:
+        raise ValueError("Key must contain at least one Latin letter or digit")
 
     result = []
-    i = 0  # advances only on letters
+    i = 0
     for ch in text:
+        shift = shifts[i % len(shifts)] * (-1 if decrypt else 1)
         if ch.isascii() and ch.isalpha():
             base = ord('A') if ch.isupper() else ord('a')
-            shift = key[i % len(key)] * (-1 if decrypt else 1)
             result.append(chr((ord(ch) - base + shift) % 26 + base))
+            i += 1
+        elif ch.isascii() and ch.isdigit():
+            result.append(str((int(ch) + shift) % 10))
             i += 1
         else:
             result.append(ch)
@@ -17,7 +25,7 @@ def vigenere(text: str, key: str, decrypt: bool = False) -> str:
 
 
 key = "secret"
-message = input("Enter your WIFI SSID: ")
+message = input("Enter net ID: ")
 
 cipher = vigenere(message, key)
 print("Ciphertext:", cipher)
